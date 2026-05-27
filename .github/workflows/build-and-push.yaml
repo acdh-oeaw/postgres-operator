@@ -577,7 +577,7 @@ jobs:
           cache-to: type=gha,mode=max
   build_collector_and_push_to_registry:
     env:
-      version: "0.147.0"
+      version: "0.152.0"
     permissions:
       packages: write
       contents: read
@@ -603,7 +603,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Create collector tags based on git data
+      - name: Create collector ${{ env.version }} tags based on git data
         id: meta
         uses: docker/metadata-action@v6
         with:
@@ -618,7 +618,7 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=raw,value=latest,enable={{is_default_branch}}
             type=raw,value=${{ steps.container_git_describe_tag.outputs.ret }}
-      - name: Build and push collector
+      - name: Build and push collector ${{ env.version }}
         uses: docker/build-push-action@v7
         with:
           context: .
