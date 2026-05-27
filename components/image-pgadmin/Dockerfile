@@ -4,7 +4,7 @@
 ARG DOCKER_REGISTRY="localhost"
 ARG RHEL9_BASE="${DOCKER_REGISTRY}/rockylinux:9-minimal"
 ARG BASE_VERSION=ubi9
-ARG PGADMIN4_VERSION=9.13
+ARG PGADMIN4_VERSION=9.15
 ARG PYTHON_VERSION=3.11
 ARG PG_MAJOR=18
 
@@ -99,6 +99,7 @@ RUN rpm -ivh "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${BASE_V
 && source /etc/os-release && \
  rpm -ivh "https://download.postgresql.org/pub/repos/yum/reporpms/EL-$REDHAT_SUPPORT_PRODUCT_VERSION-$(arch)/pgdg-redhat-repo-EL-$REDHAT_SUPPORT_PRODUCT_VERSION-latest.noarch.rpm" ||\
  rpm -ivh "https://download.postgresql.org/pub/repos/yum/reporpms/EL-$REDHAT_SUPPORT_PRODUCT_VERSION-$(arch)/pgdg-redhat-repo-latest.noarch.rpm" \
+&& microdnf update -y --nodocs \
 && microdnf install -y --nodocs --setopt install_weak_deps=0 \
 --enablerepo='epel' \
 'krb5-libs' \

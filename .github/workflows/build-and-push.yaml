@@ -143,7 +143,7 @@ jobs:
       version: ${{ env.version }}
   build_postgres_and_push_to_registry:
     env:
-      version: "18.3"
+      version: "18.4"
     permissions:
       packages: write
       contents: read
@@ -453,7 +453,7 @@ jobs:
           cache-to: type=gha,mode=max
   build_pgadmin4_and_push_to_registry:
     env:
-      version: "9.13"
+      version: "9.15"
     permissions:
       packages: write
       contents: read

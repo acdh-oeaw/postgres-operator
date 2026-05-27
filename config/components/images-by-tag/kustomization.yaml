@@ -2,7 +2,7 @@ kind: Component
 images:
 - name: image-pgadmin
   newName: ghcr.io/acdh-oeaw/postgres-operator/crunchy-pgadmin4
-  newTag: 9.13-main
+  newTag: 9.15-main
 - name: image-pgbackrest
   newName: ghcr.io/acdh-oeaw/postgres-operator/crunchy-pgbackrest
   newTag: 2.58.0-main
@@ -29,7 +29,7 @@ images:
   newTag: does-not-exist
 - name: image-crunchy-postgres-18
   newName: ghcr.io/acdh-oeaw/postgres-operator/crunchy-postgres
-  newTag: 18.3-main
+  newTag: 18.4-main
 - name: image-crunchy-upgrade
   newName: ghcr.io/acdh-oeaw/postgres-operator/crunchy-upgrade
   newTag: 18.3-main
@@ -56,4 +56,4 @@ images:
   newTag: does-not-exist
 - name: image-crunchy-postgres-18-gis-3.6
   newName: ghcr.io/acdh-oeaw/postgres-operator/crunchy-postgres-gis
-  newTag: 18.3-3.6.0-main
+  newTag: 18.4-3.6.0-main

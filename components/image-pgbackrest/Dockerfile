@@ -41,6 +41,7 @@ ARG PGBACKREST_VERSION
 RUN source /etc/os-release && \
  rpm -ivh "https://download.postgresql.org/pub/repos/yum/reporpms/EL-$REDHAT_SUPPORT_PRODUCT_VERSION-$(arch)/pgdg-redhat-repo-EL-$REDHAT_SUPPORT_PRODUCT_VERSION-latest.noarch.rpm" ||\
  rpm -ivh "https://download.postgresql.org/pub/repos/yum/reporpms/EL-$REDHAT_SUPPORT_PRODUCT_VERSION-$(arch)/pgdg-redhat-repo-latest.noarch.rpm" \
+ && microdnf update -y --nodocs \
  && microdnf install -y --nodocs --setopt install_weak_deps=0 'shadow-utils' \
  && groupadd --gid 26 postgres \
  && useradd  --gid 26 --uid 26 --no-log-init postgres \

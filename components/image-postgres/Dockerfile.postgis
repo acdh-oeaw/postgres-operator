@@ -30,6 +30,10 @@ rpm -ivh "https://download.postgresql.org/pub/repos/yum/reporpms/EL-$REDHAT_SUPP
 # Disable module to avoid conflicts
 microdnf --assumeyes module disable postgresql || true
 
+# Refresh base packages so any CVE patches that landed in the upstream
+# repos after the parent crunchy-postgres image was built are picked up.
+microdnf update -y --nodocs
+
 microdnf install -y --nodocs --setopt install_weak_deps=0 \
     --enablerepo="crb" \
     perl \
