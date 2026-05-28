@@ -26,7 +26,7 @@ images:
   newTag: 16.14-main
 - name: image-crunchy-postgres-17
   newName: ghcr.io/acdh-oeaw/postgres-operator/crunchy-postgres
-  newTag: does-not-exist
+  newTag: 17.10-main
 - name: image-crunchy-postgres-18
   newName: ghcr.io/acdh-oeaw/postgres-operator/crunchy-postgres
   newTag: 18.4-main
