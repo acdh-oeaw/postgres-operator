@@ -20,10 +20,10 @@ images:
   newTag: does-not-exist
 - name: image-crunchy-postgres-15
   newName: ghcr.io/acdh-oeaw/postgres-operator/crunchy-postgres
-  newTag: does-not-exist
+  newTag: 15.18-main
 - name: image-crunchy-postgres-16
   newName: ghcr.io/acdh-oeaw/postgres-operator/crunchy-postgres
-  newTag: 16.11-main
+  newTag: 16.14-main
 - name: image-crunchy-postgres-17
   newName: ghcr.io/acdh-oeaw/postgres-operator/crunchy-postgres
   newTag: does-not-exist
@@ -32,7 +32,7 @@ images:
   newTag: 18.4-main
 - name: image-crunchy-upgrade
   newName: ghcr.io/acdh-oeaw/postgres-operator/crunchy-upgrade
-  newTag: 18.3-main
+  newTag: 18.4-main
 - name: image-crunchy-postgres-15-gis-3.3
   newName: ghcr.io/acdh-oeaw/postgres-operator/crunchy-postgres-gis
   newTag: does-not-exist

@@ -78,9 +78,72 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-  build_postgres_old_and_push_to_registry:
+  build_postgres_15_and_push_to_registry:
     env:
-      version: "16.11"
+      version: "15.18"
+    permissions:
+      packages: write
+      contents: read
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 30
+          fetch-tags: true
+          ref: ${{ github.ref }}
+          submodules: true
+      - name: Get container Git describe tag
+        id: container_git_describe_tag
+        run: echo "ret=$(git describe --tags --always)" >> $GITHUB_OUTPUT
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Create postgres ${{ env.version }} tags based on git data
+        id: meta
+        uses: docker/metadata-action@v6
+        with:
+          flavor: |
+            prefix=${{ env.version }}-
+          images: |
+            ghcr.io/${{ github.repository }}/crunchy-postgres
+          tags: |
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=raw,value=${{ steps.container_git_describe_tag.outputs.ret }}
+      - name: Build and push postgres ${{ env.version }}
+        uses: docker/build-push-action@v7
+        with:
+          context: components/image-postgres
+          file: components/image-postgres/Dockerfile.postgres
+          build-args: |
+            DOCKER_REGISTRY=ghcr.io/${{ github.repository }}
+            POSTGRES_VERSION=${{ env.version }}
+          platforms: |
+            linux/amd64
+#            linux/arm64
+          provenance: true
+          sbom: true
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+    outputs:
+      version: ${{ env.version }}
+  build_postgres_16_and_push_to_registry:
+    env:
+      version: "16.14"
     permissions:
       packages: write
       contents: read
