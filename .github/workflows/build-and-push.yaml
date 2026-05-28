@@ -332,7 +332,7 @@ jobs:
       version: ${{ env.version }}
   build_postgres_gis_and_push_to_registry:
     env:
-      version: "3.6.0"
+      version: "3.6.3"
     needs: [build_postgres_and_push_to_registry]
     permissions:
       packages: write
