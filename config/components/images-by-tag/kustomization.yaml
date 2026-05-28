@@ -56,4 +56,4 @@ images:
   newTag: does-not-exist
 - name: image-crunchy-postgres-18-gis-3.6
   newName: ghcr.io/acdh-oeaw/postgres-operator/crunchy-postgres-gis
-  newTag: 18.4-3.6.0-main
+  newTag: 18.4-3.6.3-main
