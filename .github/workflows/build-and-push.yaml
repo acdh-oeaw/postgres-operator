@@ -628,7 +628,7 @@ jobs:
           build-args: |
             DOCKER_REGISTRY=ghcr.io/${{ github.repository }}
             PGADMIN4_VERSION=${{ env.version }}
-            PYTHON_VERSION=3.11
+            PYTHON_VERSION=3.12
             PG_MAJOR=18
           platforms: |
             linux/amd64
