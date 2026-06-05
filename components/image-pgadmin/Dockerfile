@@ -5,7 +5,7 @@ ARG DOCKER_REGISTRY="localhost"
 ARG RHEL9_BASE="${DOCKER_REGISTRY}/rockylinux:9-minimal"
 ARG BASE_VERSION=ubi9
 ARG PGADMIN4_VERSION=9.15
-ARG PYTHON_VERSION=3.11
+ARG PYTHON_VERSION=3.12
 ARG PG_MAJOR=18
 
 # Some Python packages available in UBI repositories are too old for pgAdmin
@@ -117,11 +117,19 @@ RUN rpm -ivh "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${BASE_V
 #
 # - https://docs.python.org/3/whatsnew/3.12.html
 # - https://github.com/pgadmin-org/pgadmin4/blob/REL-8_14/requirements.txt#L57
+#
+# Install "wheel" and "packaging" alongside pip/setuptools so legacy pgAdmin
+# transitive deps (e.g. Flask-Principal) that ship as sdists without a
+# pyproject.toml can build via "setup.py bdist_wheel". Without these the
+# wheel package's bdist_wheel shim fails on Python 3.12 with UBI's older
+# rpm setuptools because its fallback path imports "packaging".
 ARG PGADMIN4_VERSION
 RUN \
 microdnf install -y --nodocs \
+"python${PYTHON_VERSION}-packaging" \
 "python${PYTHON_VERSION}-pip" \
 "python${PYTHON_VERSION}-setuptools" \
+"python${PYTHON_VERSION}-wheel" \
 && microdnf clean all \
 && rm -f /etc/yum.repos.d/redhat.repo \
 && "python${PYTHON_VERSION}" -m pip install --no-cache-dir \
@@ -130,6 +138,20 @@ microdnf install -y --nodocs \
 && rm -rf /root/.cache \
 && update-alternatives --install /usr/bin/python3 python3 "/usr/bin/python${PYTHON_VERSION}" 1 \
 && update-alternatives --set python3 "/usr/bin/python${PYTHON_VERSION}"
+
+# Skip delete_adhoc_servers() when pgAdmin is invoked via its CLI entrypoints
+# (setup.py add-user / update-user / load-servers / setup-db). The CLI path
+# calls create_app() WITHOUT initializing login_manager, so as of pgAdmin 9.15
+# delete_adhoc_servers() crashes with:
+#   AttributeError: 'PgAdmin' object has no attribute 'login_manager'
+# (via current_user.is_authenticated -> _get_user -> current_app.login_manager).
+# An earlier `app.name.endswith('-cli')` guard is unreliable because Flask
+# derives app.name from the import name ("pgadmin"), not from the app_name arg
+# create_app receives. Gate on login_manager's actual presence instead:
+# True only for the gunicorn-served web app, False for every CLI invocation.
+# Tracked upstream: https://github.com/pgadmin-org/pgadmin4/issues/9987
+RUN sed -i "s/delete_adhoc_servers()/(hasattr(app, 'login_manager') and delete_adhoc_servers())/g" \
+    /usr/local/lib/python${PYTHON_VERSION}/site-packages/pgadmin4/pgadmin/__init__.py
 
 # config_local.py should be colocated with config.py
 COPY --chmod=0444 conf/config_local.py \
