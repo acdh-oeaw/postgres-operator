@@ -27,13 +27,16 @@ Have questions or looking for help? [Join our Discord group](https://discord.gg/
 
 The build process is automated in a [GitHub Action](https://github.com/acdh-oeaw/postgres-operator/blob/main/.github/workflows/build-and-push.yaml).
 
-This action has one prerequisite: It needs a current version of the `Rocky-9-Container-Minimal.latest.x86_64.tar.xz` container. At the moment this can not be found on docker hub.
-[Download it here](https://dl.rockylinux.org/pub/rocky/9/images/x86_64/Rocky-9-Container-Minimal.latest.x86_64.tar.xz) and use the following docker commands to push it to ghcr.io:
+This action has one prerequisite: It needs a current version of the `Rocky-9-Container-Minimal.latest.<arch>.tar.xz` container. At the moment this can not be found on docker hub.
+[Download it here](https://dl.rockylinux.org/pub/rocky/9/images/x86_64/Rocky-9-Container-Minimal.latest.x86_64.tar.xz) and [here](https://dl.rockylinux.org/pub/rocky/9/images/aarch64/Rocky-9-Container-Minimal.latest.aarch64.tar.xz) and use the following docker commands to push it to ghcr.io:
 You can not refer to the loaded container image by name at the moment.
 
 ```bash
 docker image load -i Rocky-9-Container-Minimal.latest.x86_64.tar.xz
-docker tag $(docker image ls --format json | jq -r -s 'map(select(.Repository=="rockylinux"and .Tag=="9-minimal") | .ID) | unique | .[]') ghcr.io/acdh-oeaw/postgres-operator/rockylinux:9-minimal
+docker tag $(docker image ls --format json | jq -r -s 'map(select(.Repository=="rockylinux"and .Tag=="9-minimal") | .ID) | unique | .[]') localhost/rockylinux:9-minimal-x64
+docker image load -i Rocky-9-Container-Minimal.latest.aarch64.tar.xz
+docker tag $(docker image ls --format json | jq -r -s 'map(select(.Repository=="rockylinux"and .Tag=="9-minimal") | .ID) | unique | .[]') localhost/rockylinux:9-minimal-a64
+docker manifest create ghcr.io/acdh-oeaw/postgres-operator/rockylinux:9-minimal --amend ghcr.io/acdh-oeaw/postgres-operator/rockylinux:9-minimal-x64 --amend ghcr.io/acdh-oeaw/postgres-operator/rockylinux:9-minimal-a64
 docker push ghcr.io/acdh-oeaw/postgres-operator/rockylinux:9-minimal
 ```
 
@@ -41,7 +44,7 @@ This only builds postgres 18.3 at the moment. More or different versions need to
 At the moment this is based on EL 9.7. When the EL 9.8 based version and so on is released the image has to be updated and the build process needs to run again.
 
 To build manually the various containers required by PGO, please see the build instructions found in the [components directory](https://github.com/acdh-oeaw/postgres-operator/tree/main/components) of this repository.
-These images are built using [packages](https://www.postgresql.org/download) developed by the PostgreSQL Global Development Group (PGDG).  
+These images are built using [packages](https://www.postgresql.org/download) developed by the PostgreSQL Global Development Group (PGDG).
 Each subdirectory contains a `README` file describing how to build each of the various containers required by PGO.
 
 The base image needed needs to be loaded like this:
