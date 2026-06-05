@@ -118,15 +118,15 @@ RUN rpm -ivh "https://dl.fedoraproject.org/pub/epel/epel-release-latest-${BASE_V
 # - https://docs.python.org/3/whatsnew/3.12.html
 # - https://github.com/pgadmin-org/pgadmin4/blob/REL-8_14/requirements.txt#L57
 #
-# Install "wheel" and "packaging" alongside pip/setuptools so legacy pgAdmin
+# Install "wheel" alongside pip/setuptools so legacy pgAdmin
 # transitive deps (e.g. Flask-Principal) that ship as sdists without a
 # pyproject.toml can build via "setup.py bdist_wheel". Without these the
 # wheel package's bdist_wheel shim fails on Python 3.12 with UBI's older
 # rpm setuptools because its fallback path imports "packaging".
+# "packaging" doesn't exist for python3.12 in rockylinux:9-minimal.
 ARG PGADMIN4_VERSION
 RUN \
 microdnf install -y --nodocs \
-"python${PYTHON_VERSION}-packaging" \
 "python${PYTHON_VERSION}-pip" \
 "python${PYTHON_VERSION}-setuptools" \
 "python${PYTHON_VERSION}-wheel" \
