@@ -12,6 +12,9 @@ images:
 - name: image-postgres-exporter
   newName: ghcr.io/acdh-oeaw/postgres-operator/crunchy-postgres-exporter
   newTag: 0.18.1-main
+- name: image-collector
+  newName: ghcr.io/acdh-oeaw/postgres-operator/crunchy-collector
+  newTag: 0.152.1-main
 - name: image-postgres-operator-6.0
   newName: ghcr.io/acdh-oeaw/postgres-operator/pgo
   newTag: main
