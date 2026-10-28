@@ -9,7 +9,7 @@ FROM registry.access.redhat.com/ubi9/go-toolset AS build
 # https://docs.docker.com/engine/reference/builder/#automatic-platform-args-in-the-global-scope
 ARG TARGETARCH
 ARG TARGETOS
-ARG EXPORTER_VERSION=0.18.1
+ARG EXPORTER_VERSION=0.19.1
 
 # Run as user 0 to allow later chmod'ing
 USER 0

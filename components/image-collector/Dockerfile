@@ -6,7 +6,7 @@
 # the OpenTelemetry image
 ARG DOCKER_REGISTRY="localhost"
 ARG RHEL9_BASE="${DOCKER_REGISTRY}/rockylinux:9-minimal"
-ARG COLLECTOR_VERSION=0.152.0
+ARG COLLECTOR_VERSION=0.159.0
 FROM otel/opentelemetry-collector-contrib:${COLLECTOR_VERSION} AS collector
 
 # Aggregate the collector licenses from binary

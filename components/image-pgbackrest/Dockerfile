@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 ARG DOCKER_REGISTRY="localhost"
 ARG RHEL9_BASE="${DOCKER_REGISTRY}/rockylinux:9-minimal"
-ARG PGBACKREST_VERSION=2.58.0
+ARG PGBACKREST_VERSION=2.59.0
 
 FROM docker.io/library/golang:bookworm AS build
 
