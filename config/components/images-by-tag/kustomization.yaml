@@ -32,7 +32,7 @@ images:
   newTag: 17.11-main
 - name: image-crunchy-postgres-18
   newName: ghcr.io/acdh-oeaw/postgres-operator/crunchy-postgres
-  newTag: 18.4-main
+  newTag: 18.6-main
 - name: image-crunchy-upgrade
   newName: ghcr.io/acdh-oeaw/postgres-operator/crunchy-upgrade
   newTag: 18.6-main
