@@ -22,18 +22,8 @@ ENV POSTGRES_MAJOR_VERSION="${POSTGRES_VERSION%.*}"
 RUN <<-SHELL
 set -e
 
-# Ensure PGDG repo (may already exist in base image)
-source /etc/os-release && \
-rpm -ivh "https://download.postgresql.org/pub/repos/yum/reporpms/EL-$REDHAT_SUPPORT_PRODUCT_VERSION-$(arch)/pgdg-redhat-repo-EL-$REDHAT_SUPPORT_PRODUCT_VERSION-latest.noarch.rpm" ||\
-rpm -ivh "https://download.postgresql.org/pub/repos/yum/reporpms/EL-$REDHAT_SUPPORT_PRODUCT_VERSION-$(arch)/pgdg-redhat-repo-latest.noarch.rpm" || true
-
-# Disable module to avoid conflicts
-microdnf --assumeyes module disable postgresql || true
-
-# Refresh base packages so any CVE patches that landed in the upstream
-# repos after the parent crunchy-postgres image was built are picked up.
-microdnf update -y --nodocs
-
+# Install the postgis add-on packages. 
+# The base image conains is meant to be up to date and contain everything needed for postgres
 microdnf install -y --nodocs --setopt install_weak_deps=0 \
     --enablerepo="crb" \
     perl \
