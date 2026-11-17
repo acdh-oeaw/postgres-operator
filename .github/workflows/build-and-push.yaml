@@ -593,7 +593,7 @@ jobs:
           cache-to: type=gha,mode=max
   build_pgbackrest_and_push_to_registry:
     env:
-      version: "2.60.1"
+      version: "2.60.0"
     permissions:
       packages: write
       contents: read
